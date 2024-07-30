@@ -7,7 +7,7 @@ until curl -s http://influxdb:8086/ping; do
 done
 
 # Configure Grafana data source
-curl -X POST http://admin:admin123@grafana:3000/api/datasources \
+curl -X POST http://${GF_SECURITY_ADMIN_USER}:${GF_SECURITY_ADMIN_PASSWORD}@grafana:3000/api/datasources \
   -H "Content-Type: application/json" \
   -d '{
     "name": "InfluxDB",
