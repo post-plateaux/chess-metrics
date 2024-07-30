@@ -33,7 +33,6 @@ services:
     depends_on:
       influxdb:
         condition: service_healthy
-      - influxdb
     volumes:
       - grafana-data:/var/lib/grafana
 
