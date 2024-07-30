@@ -11,5 +11,6 @@ datasources:
     secureJsonData:
       token: ${INFLUXDB_INIT_ADMIN_TOKEN}
     jsonData:
+      version: Flux
       organization: ${INFLUXDB_INIT_ORG}
       defaultBucket: ${INFLUXDB_INIT_BUCKET}

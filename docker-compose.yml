@@ -29,7 +29,7 @@ services:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/entrypoint.sh:/etc/grafana/entrypoint.sh
-      - ./example.env:/etc/grafana/.env
+      - ./.env:/etc/grafana/.env
 
 volumes:
   influxdb-data:
