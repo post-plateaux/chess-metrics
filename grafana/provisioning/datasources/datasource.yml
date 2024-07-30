@@ -7,6 +7,7 @@ datasources:
     url: http://influxdb:8086
     isDefault: true
     database: ${INFLUXDB_INIT_BUCKET}
+    basicAuth: false
     jsonData:
       version: Flux
       organization: ${INFLUXDB_INIT_ORG}
