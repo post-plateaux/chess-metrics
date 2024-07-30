@@ -11,6 +11,5 @@ until curl -s http://influxdb:8086/health | grep -q '"status":"pass"'; do
   sleep 5
 done
 
-
 # Start Grafana
 /run.sh
