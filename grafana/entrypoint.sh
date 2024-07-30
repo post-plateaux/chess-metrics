@@ -2,7 +2,7 @@
 
 # Source environment variables from .env file
 if [ -f /etc/grafana/.env ]; then
-  export $(cat /etc/grafana/.env | grep -v '#' | awk '/=/ {print $1}')
+  export $(grep -v '^#' /etc/grafana/.env | xargs)
 fi
 
 # Wait for InfluxDB to be ready
