@@ -1,0 +1,6 @@
+berserk                                                                                                              
+influxdb-client                                                                                                      
+python-dotenv                                                                                                        
+pytz                                                                                                                 
+requests                                                                                                             
+tenacity
