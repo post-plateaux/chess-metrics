@@ -53,7 +53,8 @@ services:
     working_dir: /app
     command: ["python3", "populate-and-update-influxdb.py"]
     depends_on:
-      - influxdb
+      influxdb:
+        condition: service_healthy
 volumes:
   influxdb-data:
   grafana-data:
