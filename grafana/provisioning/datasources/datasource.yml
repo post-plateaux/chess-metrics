@@ -7,8 +7,6 @@ datasources:
     url: http://influxdb:8086
     isDefault: true
     database: ${INFLUXDB_INIT_BUCKET}
-    secureJsonData:
-      token: ${INFLUXDB_INIT_ADMIN_TOKEN}
     jsonData:
       version: Flux
       organization: ${INFLUXDB_INIT_ORG}
