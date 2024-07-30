@@ -24,13 +24,19 @@ lichess_token = os.getenv('LICHESS_TOKEN')
 lichess_username = os.getenv('LICHESS_USERNAME')
 client = berserk.Client(berserk.TokenSession(lichess_token))
 
-# InfluxDB setup
+# InfluxDB setup with retry mechanism
 influx_url = os.getenv('INFLUX_URL', "http://influxdb:8086")
 influx_token = os.getenv('INFLUXDB_INIT_PASSWORD')
 org = os.getenv('INFLUXDB_INIT_ORG')
 bucket = os.getenv('INFLUXDB_INIT_BUCKET')
 
-influx_client = InfluxDBClient(url=influx_url, token=influx_token, org=org)
+@retry(retry=retry_if_exception_type((requests.exceptions.RequestException, ConnectionRefusedError)), 
+       stop=stop_after_attempt(5), wait=wait_fixed(10))
+def create_influx_client():
+    client = InfluxDBClient(url=influx_url, token=influx_token, org=org)
+    return client
+
+influx_client = create_influx_client()
 write_options = WriteOptions(batch_size=500, flush_interval=10_000, jitter_interval=2_000, retry_interval=5_000)
 write_api = influx_client.write_api(write_options=write_options)
 query_api = influx_client.query_api()
