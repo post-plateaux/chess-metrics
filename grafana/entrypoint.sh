@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Source environment variables from .env file
+if [ -f /etc/grafana/.env ]; then
+  export $(cat /etc/grafana/.env | grep -v '#' | awk '/=/ {print $1}')
+fi
+
 # Wait for InfluxDB to be ready
 until curl -s http://influxdb:8086/ping; do
   echo "Waiting for InfluxDB..."
