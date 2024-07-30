@@ -25,7 +25,7 @@ lichess_username = os.getenv('LICHESS_USERNAME')
 client = berserk.Client(berserk.TokenSession(lichess_token))
 
 # InfluxDB setup
-influx_url = "http://influxdb:8086"
+influx_url = os.getenv('INFLUX_URL', "http://influxdb:8086")
 influx_token = os.getenv('INFLUXDB_INIT_PASSWORD')
 org = os.getenv('INFLUXDB_INIT_ORG')
 bucket = os.getenv('INFLUXDB_INIT_BUCKET')

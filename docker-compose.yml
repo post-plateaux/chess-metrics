@@ -30,6 +30,22 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
 
+  populate_and_update:
+    image: python:3.10
+    container_name: populate_and_update
+    environment:
+      - LICHESS_TOKEN=${LICHESS_TOKEN}
+      - LICHESS_USERNAME=${LICHESS_USERNAME}
+      - INFLUXDB_INIT_PASSWORD=${INFLUXDB_INIT_PASSWORD}
+      - INFLUXDB_INIT_ORG=${INFLUXDB_INIT_ORG}
+      - INFLUXDB_INIT_BUCKET=${INFLUXDB_INIT_BUCKET}
+    volumes:
+      - ./populate-and-update-influxdb.py:/app/populate-and-update-influxdb.py
+      - ./example.env:/app/.env
+    working_dir: /app
+    command: ["python3", "populate-and-update-influxdb.py"]
+    depends_on:
+      - influxdb
 volumes:
   influxdb-data:
   grafana-data:
