@@ -23,16 +23,10 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
-    entrypoint: ["/bin/bash", "/etc/grafana/entrypoint.sh"]
     depends_on:
       - influxdb
-    env_file:
-      - ./.env
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/entrypoint.sh:/etc/grafana/entrypoint.sh
-      - ./.env:/etc/grafana/.env
 
 volumes:
   influxdb-data:
