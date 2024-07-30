@@ -31,7 +31,9 @@ services:
       - grafana-data:/var/lib/grafana
 
   populate_and_update:
-    image: python:3.10
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: populate_and_update
     environment:
       - LICHESS_TOKEN=${LICHESS_TOKEN}
