@@ -5,31 +5,34 @@ if [ -f /etc/grafana/.env ]; then
   export $(grep -v '^#' /etc/grafana/.env | xargs)
 fi
 
-# Wait for InfluxDB to be ready
-until curl -s http://influxdb:8086/ping; do
-  echo "Waiting for InfluxDB..."
-  sleep 5
-done
+# Generate InfluxDB token if it doesn't exist
+if [ -z "$INFLUXDB_INIT_ADMIN_TOKEN" ]; then
+  INFLUXDB_INIT_ADMIN_TOKEN=$(curl -X POST http://influxdb:8086/api/v2/authorizations \
+    -H "Authorization: Token ${INFLUXDB_INIT_ADMIN_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "status": "active",
+      "description": "admin token",
+      "orgID": "'"${INFLUXDB_INIT_ORG_ID}"'",
+      "permissions": [
+        {
+          "action": "read",
+          "resource": {
+            "type": "buckets"
+          }
+        },
+        {
+          "action": "write",
+          "resource": {
+            "type": "buckets"
+          }
+        }
+      ]
+    }' | jq -r '.token')
 
-# Configure Grafana data source
-curl -X POST http://${GF_SECURITY_ADMIN_USER}:${GF_SECURITY_ADMIN_PASSWORD}@grafana:3000/api/datasources \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "InfluxDB",
-    "type": "influxdb",
-    "access": "proxy",
-    "url": "http://influxdb:8086",
-    "isDefault": true,
-    "database": "'"${INFLUXDB_INIT_BUCKET}"'",
-    "user": "'"${INFLUXDB_INIT_USERNAME}"'",
-    "secureJsonData": {
-      "token": "'"${INFLUXDB_INIT_ADMIN_TOKEN}"'"
-    },
-    "jsonData": {
-      "organization": "'"${INFLUXDB_INIT_ORG}"'",
-      "defaultBucket": "'"${INFLUXDB_INIT_BUCKET}"'"
-    }
-  }'
+  echo "INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_INIT_ADMIN_TOKEN}" >> /etc/grafana/.env
+  export INFLUXDB_INIT_ADMIN_TOKEN
+fi
 
 # Start Grafana
 /run.sh

@@ -7,7 +7,6 @@ datasources:
     url: http://influxdb:8086
     isDefault: true
     database: ${INFLUXDB_INIT_BUCKET}
-    user: ${INFLUXDB_INIT_USERNAME}
     secureJsonData:
       token: ${INFLUXDB_INIT_ADMIN_TOKEN}
     jsonData:
